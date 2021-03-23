@@ -46,11 +46,11 @@ public final class DefaultNetworkService {
     
     private let config: NetworkConfigurable
     private let sessionManager: NetworkSessionManager
-    private let logger: NetworkErrorLogger
+    private let logger: NetworkErrorLogger?
     
     public init(config: NetworkConfigurable,
                 sessionManager: NetworkSessionManager = DefaultNetworkSessionManager(),
-                logger: NetworkErrorLogger = DefaultNetworkErrorLogger()) {
+                logger: NetworkErrorLogger? = nil) {
         self.sessionManager = sessionManager
         self.config = config
         self.logger = logger
@@ -68,15 +68,15 @@ public final class DefaultNetworkService {
                     error = self.resolve(error: requestError)
                 }
                 
-                self.logger.log(error: error)
+                self.logger?.log(error: error)
                 completion(.failure(error))
             } else {
-                self.logger.log(responseData: data, response: response)
+                self.logger?.log(responseData: data, response: response)
                 completion(.success(data))
             }
         }
     
-        logger.log(request: request)
+        logger?.log(request: request)
 
         return sessionDataTask
     }
@@ -125,10 +125,10 @@ public final class DefaultNetworkErrorLogger: NetworkErrorLogger {
     public init() { }
 
     public func log(request: URLRequest) {
-        print("-------------")
-        print("request: \(request.url!)")
-        print("headers: \(request.allHTTPHeaderFields!)")
-        print("method: \(request.httpMethod!)")
+		printIfDebug("-------------")
+		printIfDebug("request: \(request.url!)")
+		printIfDebug("headers: \(request.allHTTPHeaderFields!)")
+		printIfDebug("method: \(request.httpMethod!)")
         if let httpBody = request.httpBody, let result = ((try? JSONSerialization.jsonObject(with: httpBody, options: []) as? [String: AnyObject]) as [String: AnyObject]??) {
             printIfDebug("body: \(String(describing: result))")
         } else if let httpBody = request.httpBody, let resultString = String(data: httpBody, encoding: .utf8) {

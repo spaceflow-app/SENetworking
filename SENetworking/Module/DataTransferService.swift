@@ -41,11 +41,11 @@ public final class DefaultDataTransferService {
 
     private let networkService: NetworkService
     private let errorResolver: DataTransferErrorResolver
-    private let errorLogger: DataTransferErrorLogger
+    private let errorLogger: DataTransferErrorLogger?
 
     public init(with networkService: NetworkService,
                 errorResolver: DataTransferErrorResolver = DefaultDataTransferErrorResolver(),
-                errorLogger: DataTransferErrorLogger = DefaultDataTransferErrorLogger()) {
+                errorLogger: DataTransferErrorLogger? = nil) {
         self.networkService = networkService
         self.errorResolver = errorResolver
         self.errorLogger = errorLogger
@@ -63,7 +63,7 @@ extension DefaultDataTransferService: DataTransferService {
                 let result: Result<T, DataTransferError> = self.decode(data: data, decoder: endpoint.responseDecoder)
                 DispatchQueue.main.async { return completion(result) }
             case .failure(let error):
-                self.errorLogger.log(error: error)
+                self.errorLogger?.log(error: error)
                 let error = self.resolve(networkError: error)
                 DispatchQueue.main.async { return completion(.failure(error)) }
             }
@@ -76,7 +76,7 @@ extension DefaultDataTransferService: DataTransferService {
             case .success:
                 DispatchQueue.main.async { return completion(.success(())) }
             case .failure(let error):
-                self.errorLogger.log(error: error)
+                self.errorLogger?.log(error: error)
                 let error = self.resolve(networkError: error)
                 DispatchQueue.main.async { return completion(.failure(error)) }
             }
@@ -90,7 +90,7 @@ extension DefaultDataTransferService: DataTransferService {
             let result: T = try decoder.decode(data)
             return .success(result)
         } catch {
-            self.errorLogger.log(error: error)
+            self.errorLogger?.log(error: error)
             return .failure(.parsing(error))
         }
     }
