@@ -1,13 +1,10 @@
 # SENetworking
 
-[![CocoaPods](https://img.shields.io/cocoapods/v/SENetworking)](https://cocoapods.org/pods/SENetworking)
-[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![Swift Package Manager compatible](https://img.shields.io/badge/SPM-compatible-4BC51D.svg?style=flat)](https://github.com/apple/swift-package-manager)
-[![Swift 5](https://img.shields.io/badge/compatible-swift%205.0%20-orange.svg)](https://cocoapods.org/pods/SENetworking)
-[![Platform](https://img.shields.io/cocoapods/p/SENetworking)](https://cocoapods.org/pods/SENetworking#carthage-to-install-it-with-carthage-simply-add-the-following-line-to-your-cartfile)
-[![License](https://img.shields.io/github/license/kudoleh/SENetworking)](https://cocoapods.org/pods/SENetworking#license)
-[![CI](https://img.shields.io/travis/kudoleh/SENetworking)](https://travis-ci.com/github/kudoleh/SENetworking)
-
+[![Swift 5](https://img.shields.io/badge/compatible-swift%205.0%20-orange.svg)](https://github.com/spaceflow-app/SENetworking)
+[![Platform](https://img.shields.io/cocoapods/p/SENetworking)](https://github.com/spaceflow-app/SENetworking)
+[![License](https://img.shields.io/github/license/kudoleh/SENetworking)](https://github.com/spaceflow-app/SENetworking#license)
+[![CI](https://github.com/spaceflow-app/SENetworking/actions/workflows/swift.yml/badge.svg)](https://github.com/spaceflow-app/SENetworking/actions)
 
 **S**uper **E**asy **Networking** is  simple and convenient wrapper around NSURLSession that supports common needs. A framework that is small enough to read in one go but useful enough to include in any project. It is fully tested framework for iOS, tvOS, watchOS and OS X.
 
@@ -103,26 +100,12 @@ dataTransferService.request(with: endpoint) { result in
 
 ## Installation
 
-### [CocoaPods](https://cocoapods.org): To install it with CocoaPods, simply add the following line to your Podfile:
-
-```ruby
-pod 'SENetworking'
-```
-Then **pod install** and **import SFNetworking** in files where needed
-
-### [Carthage](https://github.com/Carthage/Carthage): To install it with Carthage, simply add the following line to your Cartfile:
-
-```ruby
-github "kudoleh/SENetworking"
-```
-Then **carthage update** and **import SFNetworking_iOS** in files where needed (e.g. for iOS platform)
-
 ### [Swift Package Manager](https://swift.org/package-manager/): To install it with Package Manager:
 ```ruby
 Xcode tab: File -> Swift Packages -> Add Package Dependency 
-Enter package repository URL: https://github.com/kudoleh/SENetworking
+Enter package repository URL: https://github.com/spaceflow-app/SENetworking
 ```
-And then **import SFNetworking** in files where needed
+And then **import SENetworking** in files where needed
 
 ### Manual installation: To manually install it:
 ```ruby
