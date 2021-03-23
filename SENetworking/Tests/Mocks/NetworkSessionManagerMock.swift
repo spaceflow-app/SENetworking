@@ -6,7 +6,7 @@
 //
 
 import Foundation
-@testable import SFNetworkingExample
+@testable import SENetworking
 
 struct NetworkSessionManagerMock: NetworkSessionManager {
     let response: HTTPURLResponse?

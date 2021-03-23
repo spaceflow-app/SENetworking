@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import SFNetworkingExample
+@testable import SENetworking
 
 private struct MockModel: Decodable {
     let name: String

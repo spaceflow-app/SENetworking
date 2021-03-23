@@ -5,6 +5,10 @@ import PackageDescription
 
 let package = Package(
     name: "SENetworking",
+	platforms: [
+		.iOS(.v10),
+		.macOS(.v10_12)
+	],
     products: [
         .library(
             name: "SENetworking",
@@ -15,5 +19,9 @@ let package = Package(
             name: "SENetworking",
             dependencies: [],
             path: "./SENetworking/Module"),
+		.testTarget(
+			name: "SENetworkingTests",
+			dependencies: ["SENetworking"],
+			path: "./SENetworking/Tests"),
     ]
 )
