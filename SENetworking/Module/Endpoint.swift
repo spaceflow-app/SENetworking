@@ -24,7 +24,7 @@ public enum BodyEncoding {
 	case stringEncodingAscii
 }
 
-public open class Endpoint<R>: ResponseRequestable {
+open class Endpoint<R>: ResponseRequestable {
 
 	public typealias Response = R
 
