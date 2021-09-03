@@ -10,7 +10,7 @@ import XCTest
 
 class NetworkServiceTests: XCTestCase {
     
-    private struct EndpointMock: Requestable {
+	private struct EndpointMock: Requestable {
 
         var path: String
         var isFullPath: Bool = false
@@ -18,7 +18,8 @@ class NetworkServiceTests: XCTestCase {
         var headerParameters: [String: String] = [:]
         var queryParametersEncodable: Encodable?
         var queryParameters: [String: Any] = [:]
-        var bodyParametersEncodable: Encodable?
+        var bodyEncodable: Encodable?
+		var bodyEncoder: JSONEncoder = JSONEncoder()
         var bodyParameters: [String: Any] = [:]
         var bodyEncoding: BodyEncoding = .stringEncodingAscii
         

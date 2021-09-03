@@ -34,7 +34,8 @@ open class Endpoint<R>: ResponseRequestable {
 	public var headerParameters: [String: String]
 	public var queryParametersEncodable: Encodable? = nil
 	public var queryParameters: [String: Any]
-	public var bodyParametersEncodable: Encodable? = nil
+	public var bodyEncodable: Encodable? = nil
+	public var bodyEncoder: JSONEncoder
 	public var bodyParameters: [String: Any]
 	public var bodyEncoding: BodyEncoding
 	public var responseDecoder: ResponseDecoder
@@ -45,7 +46,8 @@ open class Endpoint<R>: ResponseRequestable {
 		 headerParameters: [String: String] = [:],
 		 queryParametersEncodable: Encodable? = nil,
 		 queryParameters: [String: Any] = [:],
-		 bodyParametersEncodable: Encodable? = nil,
+		 bodyEncodable: Encodable? = nil,
+		 bodyEncoder: JSONEncoder = JSONEncoder(),
 		 bodyParameters: [String: Any] = [:],
 		 bodyEncoding: BodyEncoding = .jsonSerializationData,
 		 responseDecoder: ResponseDecoder = JSONResponseDecoder()) {
@@ -55,7 +57,8 @@ open class Endpoint<R>: ResponseRequestable {
 		self.headerParameters = headerParameters
 		self.queryParametersEncodable = queryParametersEncodable
 		self.queryParameters = queryParameters
-		self.bodyParametersEncodable = bodyParametersEncodable
+		self.bodyEncodable = bodyEncodable
+		self.bodyEncoder = bodyEncoder
 		self.bodyParameters = bodyParameters
 		self.bodyEncoding = bodyEncoding
 		self.responseDecoder = responseDecoder
@@ -69,7 +72,8 @@ public protocol Requestable {
 	var headerParameters: [String: String] { get }
 	var queryParametersEncodable: Encodable? { get }
 	var queryParameters: [String: Any] { get }
-	var bodyParametersEncodable: Encodable? { get }
+	var bodyEncodable: Encodable? { get }
+	var bodyEncoder: JSONEncoder { get }
 	var bodyParameters: [String: Any] { get }
 	var bodyEncoding: BodyEncoding { get }
 
@@ -115,10 +119,12 @@ extension Requestable {
 		var allHeaders: [String: String] = config.headers
 		headerParameters.forEach { allHeaders.updateValue($1, forKey: $0) }
 
-		let bodyParameters = try bodyParametersEncodable?.toDictionary() ?? self.bodyParameters
-		if !bodyParameters.isEmpty {
+		if let encodable = bodyEncodable {
+			urlRequest.httpBody = try encodable.encode(with: bodyEncoder)
+		} else if !bodyParameters.isEmpty {
 			urlRequest.httpBody = encodeBody(bodyParameters: bodyParameters, bodyEncoding: bodyEncoding)
 		}
+
 		urlRequest.httpMethod = method.rawValue
 		urlRequest.allHTTPHeaderFields = allHeaders
 		return urlRequest
@@ -143,10 +149,15 @@ private extension Dictionary {
 }
 
 private extension Encodable {
+
 	func toDictionary() throws -> [String: Any]? {
 		let data = try JSONEncoder().encode(self)
 		let josnData = try JSONSerialization.jsonObject(with: data)
 		return josnData as? [String : Any]
 	}
-}
 
+	func encode(with encoder: JSONEncoder) throws -> Data {
+		try encoder.encode(self)
+	}
+
+}
