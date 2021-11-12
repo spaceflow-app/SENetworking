@@ -74,8 +74,14 @@ public final class DefaultNetworkService {
                 self.logger?.log(error: error)
                 completion(.failure(error))
             } else {
-                self.logger?.log(responseData: data, response: response)
-                completion(.success(data))
+				if let response = response as? HTTPURLResponse, !response.isStatusCodeSuccessful {
+					let error = NetworkError.error(statusCode: response.statusCode, data: data)
+					self.logger?.log(error: error)
+					completion(.failure(error))
+				} else {
+					self.logger?.log(responseData: data, response: response)
+					completion(.success(data))
+				}
             }
         }
     
@@ -163,6 +169,15 @@ extension NetworkError {
         default: return false
         }
     }
+}
+
+// MARK: - HTTPURLResponse extension
+
+extension HTTPURLResponse {
+	
+	var isStatusCodeSuccessful: Bool {
+		return Array(200 ..< 300).contains(statusCode)
+	}
 }
 
 func printIfDebug(_ string: String) {
